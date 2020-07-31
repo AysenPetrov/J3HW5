@@ -1,9 +1,14 @@
 package J3HW5;
 
+import java.sql.SQLOutput;
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Car implements Runnable {
+    private static AtomicInteger ai;
     private static int CARS_COUNT;
     static {
         CARS_COUNT = 0;
+        ai =new AtomicInteger(0);
     }
     private Race race;
     private int speed;
@@ -35,5 +40,8 @@ public class Car implements Runnable {
         for (int i = 0; i < race.getStages().size(); i++) {
             race.getStages().get(i).go(this);
         }
+        if (ai.incrementAndGet()== 1) {
+            System.out.println(name+ "WIN!!!");
+        }
+        }
     }
-}
