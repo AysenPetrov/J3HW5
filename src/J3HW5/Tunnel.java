@@ -1,26 +1,30 @@
 package J3HW5;
 
+import java.util.concurrent.Semaphore;
+
 public class Tunnel extends Stage {
-    Tunnel() {
+    private Semaphore smp;
+
+    public Tunnel(){
+        smp = new Semaphore(MainClass.CARS_COUNT/2);
         this.length = 80;
         this.description = "Тоннель " + length + " метров";
     }
     @Override
     public void go(Car c) {
         try {
-            try {
+            if (!smp.tryAcquire()) {
                 System.out.println(c.getName() + " готовится к этапу(ждет): " + description);
-                MainClass.tunnel.acquire();
+                smp.acquire();
+            }
                 System.out.println(c.getName() + " начал этап: " + description);
                 Thread.sleep(length / c.getSpeed() * 1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } finally {
-                MainClass.tunnel.release();
                 System.out.println(c.getName() + " закончил этап: " + description);
+                smp.release();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
 }
