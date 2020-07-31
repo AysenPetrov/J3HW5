@@ -5,8 +5,7 @@ import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.Semaphore;
 
 public class MainClass {
-
-    private static final int CARS_COUNT = 4;
+    public static final int CARS_COUNT = 4;
     static CountDownLatch startLine = new CountDownLatch(CARS_COUNT);
     static CyclicBarrier roadStage = new CyclicBarrier(CARS_COUNT);
     static Semaphore tunnel = new Semaphore(CARS_COUNT/2,true);
@@ -18,8 +17,6 @@ public class MainClass {
         Car[] cars = new Car[CARS_COUNT];
         for (int i = 0; i < cars.length; i++) {
             cars[i] = new Car(race, 20 + (int) (Math.random() * 10));
-        }
-        for (int i = 0; i < cars.length; i++) {
             new Thread(cars[i]).start();
         }
         while (startLine.getCount() > 0) //Проверяем, собрались ли все автомобили
